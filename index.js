@@ -21,6 +21,7 @@ const {
 } = require('discord.js');
 require('dotenv').config();
 const fs = require('fs');
+const http = require('http');
 const { createCanvas } = require('@napi-rs/canvas');
 const { loadImage } = require('@napi-rs/canvas');
 const path = require('path');
@@ -8488,5 +8489,10 @@ setInterval(async () => {
         }
     }
 }, 5 * 60 * 1000);
+
+http.createServer((req, res) => {
+    res.write('Le bot Discord est en ligne !');
+    res.end();
+}).listen(process.env.PORT || 3000);
 
 client.login(DISCORD_TOKEN); // <-- Lancement final
