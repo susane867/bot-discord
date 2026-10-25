@@ -1,0 +1,956 @@
+{
+  "1224384722893799538": {
+    "currentQuest": 14,
+    "progress": 0,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1385957338308939857": {
+    "currentQuest": 1,
+    "progress": 1,
+    "completed": false,
+    "started": false
+  },
+  "1078679590748299334": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1541074202180980746:1078679590748299334": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1541074202180980746:1224384722893799538": {
+    "currentQuest": 2,
+    "progress": 0,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:561947186888179743": {
+    "currentQuest": 8,
+    "progress": 0,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1224384722893799538": {
+    "currentQuest": 10,
+    "progress": 8,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:918197017648455731": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1335194590923460691": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1474762274244788265:1405626341000216606": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1532070243072217212": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1474762274244788265:458239846054494210": {
+    "currentQuest": 6,
+    "progress": 1,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:900865995520999445": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1411654623269224540": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1458849280033951968": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:842442480150249514": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1474762274244788265:864998391541268491": {
+    "currentQuest": 4,
+    "progress": 0,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1503730762783002634": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1404083681097814058": {
+    "currentQuest": 3,
+    "progress": 24,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1385957338308939857": {
+    "currentQuest": 3,
+    "progress": 1,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1000790929323593728": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:684773505157431347": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1042847557958779012": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1514969525089472572": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1537593773129863188": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1474762274244788265:1409709936786538569": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:454947833879986186": {
+    "currentQuest": 7,
+    "progress": 0,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1208628816201781300": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1263960596064370742": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:998376073840570409": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1078679590748299334": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1411654623269224540": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1474762274244788265:1264372125876097065": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1176554298537148437": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1474762274244788265:988065878287458364": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1541074202180980746:1132730883544195073": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0
+  },
+  "1474762274244788265:1388312966767837305": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1144281574922256565": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1176015223015100497": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1375587216579104789": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:259476725690269707": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1315435639453519945": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1491164554644951100": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1419565986801258537": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1220726577998856295": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1491429693029879979": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1001033218524467250": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1514731702176448609": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:776765613645365248": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:968555100987609128": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1114522759251361832": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:875867244264054835": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:888475741858181151": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:900538235720187925": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:541074479934341120": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:857387440742727691": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1167831532216533073": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1439555970945515620": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1112801809669558283": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1157874405406421003": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1482028457889235100": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:823245627738554380": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1367145852849623091": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1347354017092866131": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:979865479797698600": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:576469755746058251": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1440052295189401752": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1379544416544624691": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:999695415127588884": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:479658732498714624": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1558470824858755240": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:725368500108918827": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1417509096428671008": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1467301783947841718": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:715350226264784956": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:438349964431851520": {
+    "currentQuest": 7,
+    "progress": 0,
+    "completed": false,
+    "started": true,
+    "messageCount": 0,
+    "voiceSeconds": 1073,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1170768167774195746": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1136669671358214195": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1246937573381902421": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1459864926477881405": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1234828614403625020": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1145696595480944823": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:687435772143599647": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1442357816483381278": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1544438122614628445": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1562556240675213445": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1125557838366920714": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1024698318762299592": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1329189335605706844": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1447796136399208619": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:317307387054784512": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:810397402884341790": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1364676805830901896": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1550187451937456268": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1271618766244941946": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1029094811229229086": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  },
+  "1474762274244788265:1143587903969177720": {
+    "currentQuest": 1,
+    "progress": 0,
+    "completed": false,
+    "started": false,
+    "messageCount": 0,
+    "voiceSeconds": 0,
+    "inviteCount": 0,
+    "questConfigVersion": 4
+  }
+}

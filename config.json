@@ -1,0 +1,483 @@
+{
+  "1474762274244788265": {
+    "logChannelId": "1531391943710609559",
+    "inviteLogChannelId": "1520873783270047946",
+    "proofChannelId": "1555801595332263987",
+    "questLogChannelId": "1531391943710609559",
+    "questPingRoleId": "1553642454962540584",
+    "topLevelsSettings": {
+      "backgroundImage": "https://cdn.discordapp.com/attachments/1541074202730438700/1555061273249456158/FOR_THIS_FLOWER_.jfif?backend=b2&ex=6ac1216b&is=6abfcfeb&hm=0547895f775de7a5990f169b518bfc5af7a302ba605b235364cf3a0cc3e2b2e6&",
+      "backgroundColor": "141A24",
+      "rowColor": "222B3A",
+      "borderColor": "F78F8F",
+      "textColor": "F3F5F7"
+    },
+    "levelSettings": {
+      "enabled": true,
+      "xpPerMessage": 10,
+      "cooldownSeconds": 120,
+      "voiceXpPerInterval": 10,
+      "voiceIntervalSeconds": 300,
+      "minimumVoiceMembers": 2,
+      "rewards": [
+        {
+          "level": 5,
+          "roleId": "1526363081393967234"
+        },
+        {
+          "level": 10,
+          "roleId": "1526363142031015936"
+        },
+        {
+          "level": 20,
+          "roleId": "1526363206153404546"
+        },
+        {
+          "level": 30,
+          "roleId": "1526363278165545101"
+        },
+        {
+          "level": 40,
+          "roleId": "1526363360935940167"
+        },
+        {
+          "level": 50,
+          "roleId": "1526363453076537484"
+        },
+        {
+          "level": 60,
+          "roleId": "1526363515378733056"
+        },
+        {
+          "level": 70,
+          "roleId": "1526363578859524246"
+        },
+        {
+          "level": 80,
+          "roleId": "1526363648581435543"
+        },
+        {
+          "level": 100,
+          "roleId": "1526363723034525869"
+        }
+      ],
+      "title": "Bravo petit con ! {user} tu es level {level}",
+      "color": "F78F8F",
+      "imageUrl": "https://cdn.discordapp.com/attachments/1541074202730438700/1555053301131903096/Gemini_Generated_Image_6mhlfs6mhlfs6mhl.jfif?backend=b2&ex=6ac119fe&is=6abfc87e&hm=5975bd856f45351ba7ccad47a83665366aa7de689cd823e0db4dd809fc95e47c&",
+      "channelId": "1474765561853382800"
+    },
+    "questLeaderboardSettings": {
+      "backgroundImage": "https://cdn.discordapp.com/attachments/1541074202730438700/1555061273249456158/FOR_THIS_FLOWER_.jfif?backend=b2&ex=6abf272b&is=6abdd5ab&hm=3b35d118453fbf54e133bef0f9b8137cfee10b1c5a37d4ead0197eb50eb6a22d&",
+      "backgroundColor": "1F1A1A",
+      "rowColor": "26312E",
+      "borderColor": "F7ABCC",
+      "textColor": "F4F0E7"
+    },
+    "commandLogChannelId": "1531391943710609559",
+    "normalQuestsEnabled": true,
+    "rouletteSettings": {
+      "maxSpins": 3,
+      "cooldownHours": 168
+    },
+    "commandLogging": {
+      "enabled": true,
+      "defaultChannelId": "1531391943710609559",
+      "modules": {
+        "moderation": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "administration": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "levels": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "quests": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "roulette": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "tickets": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "roblox": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "messages": {
+          "enabled": true,
+          "channelId": "",
+          "color": "E17755",
+          "avatarUrl": ""
+        },
+        "deletedMessages": {
+          "enabled": true,
+          "channelId": "1531391943710609559",
+          "color": "E17755",
+          "avatarUrl": ""
+        }
+      }
+    },
+    "rankupAnnouncementSettings": {
+      "channelId": "1490773740425052390",
+      "testRoleId": "1474784895271440657",
+      "memberRoleId": "1474774890052849798",
+      "pingRoleId": "1474774890052849798",
+      "testMessage": "🎉 Nous avons un nouveau test dans la famille ! Souhaitez la bienvenue à {user} et mettez-le à l’aise dans la BMF !",
+      "memberMessage": "🎉 Félicitations à {user} qui a réussi son test ! Bienvenue dans la famille BMF, mets-toi à l’aise !"
+    },
+    "specialQuestChannelId": "1555666399077072956",
+    "specialQuestRoleId": "1553642454962540584",
+    "questValidatorRoleIds": [
+      "1475166213645799657"
+    ],
+    "questChannelId": "1553547815244791879",
+    "tokenDropChannelId": "1553630744826351626",
+    "nextTokenDropAt": 1792960535425,
+    "inviteLogsEnabled": true
+  },
+  "menu_ticket_1787503347581": {
+    "categoryId": "1475853276724596787",
+    "staffRoleId": "1541090201865027676"
+  },
+  "menu_ticket_1788187218354": {
+    "categoryId": "1475853276724596787",
+    "staffRoleId": "1541090201865027676"
+  },
+  "menu_ticket_1788187234502": {
+    "categoryId": "1475853276724596787",
+    "staffRoleId": "1541090201865027676"
+  },
+  "menu_ticket_1789669253595": {
+    "categoryId": "1541090201865027676",
+    "staffRoleId": "1541090201865027676"
+  },
+  "menu_ticket_1789669311987": {
+    "categoryId": "1541090201865027676",
+    "staffRoleId": "1541090201865027676"
+  },
+  "menu_ticket_1789672279358": {
+    "categoryId": "1475853276724596787",
+    "staffRoleId": "1541090201865027676"
+  },
+  "1541074202180980746": {
+    "logChannelId": "1553598784062099506",
+    "questLogChannelId": "1552844778326990848",
+    "questPingRoleId": "1541102317338755196",
+    "proofChannelId": "1553598784062099506",
+    "questValidatorRoleIds": [
+      "1541102317338755196"
+    ],
+    "specialQuestChannelId": "1541074202730438700",
+    "specialQuestRoleId": "1541105273110794300",
+    "levelSettings": {
+      "enabled": true,
+      "xpPerMessage": 10,
+      "cooldownSeconds": 120,
+      "voiceXpPerInterval": 10,
+      "voiceIntervalSeconds": 300,
+      "minimumVoiceMembers": 2,
+      "rewards": [],
+      "title": "Niveau de {user} atteitn {level}",
+      "color": "D9AA61",
+      "imageUrl": "https://cdn.discordapp.com/attachments/1541074202730438700/1555053301131903096/Gemini_Generated_Image_6mhlfs6mhlfs6mhl.jfif?backend=b2&ex=6abf1fbe&is=6abdce3e&hm=48a0b69fde3f84db3f530a64d8adbc3e104cece85bf60aa5134b60bc1658edc1&",
+      "channelId": "1553598784062099506"
+    },
+    "questLeaderboardSettings": {
+      "backgroundImage": "https://cdn.discordapp.com/attachments/1541074202730438700/1555061273249456158/FOR_THIS_FLOWER_.jfif?backend=b2&ex=6abf272b&is=6abdd5ab&hm=3b35d118453fbf54e133bef0f9b8137cfee10b1c5a37d4ead0197eb50eb6a22d&",
+      "backgroundColor": "1F1A1A",
+      "rowColor": "26312E",
+      "borderColor": "F7ABCC",
+      "textColor": "F4F0E7"
+    },
+    "topLevelsSettings": {
+      "backgroundImage": "https://cdn.discordapp.com/attachments/1541074202730438700/1555065172148887623/Red_Spider_Lilies__Torii___Japanese_Shrine_Aesthetic.jfif?backend=b2&ex=6abf2acc&is=6abdd94c&hm=09ff7ff99a3214a87d021f41c50d9c30f341bbb99cd60d6a3aa4b180b566468a&",
+      "backgroundColor": "141A24",
+      "rowColor": "222B3A",
+      "borderColor": "FA7070",
+      "textColor": "F3F5F7"
+    },
+    "normalQuestDefinitions": [
+      {
+        "title": "Premiers pas dans la famille",
+        "type": "messages",
+        "goal": 10,
+        "description": "Envoie 10 messages et présente-toi.",
+        "reward": "Rôle \"Nouveau de la Famille\" + 100 XP",
+        "roleId": "1541105273110794300"
+      },
+      {
+        "title": "Première voix",
+        "type": "voice",
+        "goal": 15,
+        "description": "Passe 15 minutes en vocal. Compte uniquement le temps réel passé dans un salon vocal.",
+        "reward": "100 IG + 150 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Discussion active",
+        "type": "messages",
+        "goal": 30,
+        "description": "Envoie 30 messages sur le serveur.",
+        "reward": "200 IG + 200 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Élève Assidu",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Va à l'école, prends un screen dans la cour avec un membre.",
+        "reward": "Rôle \"Élève Assidu\" + 350 IG + 250 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Session vocale",
+        "type": "voice",
+        "goal": 30,
+        "description": "Participe à une session vocale de 30 minutes. Le temps compte seulement si tu es réellement en vocal.",
+        "reward": "300 IG + 300 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Cap des 50 messages",
+        "type": "messages",
+        "goal": 50,
+        "description": "Envoie 50 messages au total.",
+        "reward": "400 IG + 400 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Immersion School RP",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Passe 30 minutes connectées sur School RP.",
+        "reward": "500 IG + 500 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Parrainage",
+        "type": "invite",
+        "goal": 2,
+        "description": "Invite 2 amis sur le Discord de la famille.",
+        "reward": "400 IG + 400 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Reaction",
+        "type": "reaction",
+        "goal": 20,
+        "description": "Réagis avec des émojis sur 20 messages (il n'y a que les nouveaux messages pris en compte).",
+        "reward": "Rôle \"Serpentin\" + 400 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Rythme de croisière",
+        "type": "messages",
+        "goal": 75,
+        "description": "Envoie 75 messages.",
+        "reward": "500 IG + 1 100 XP",
+        "roleId": ""
+      },
+      {
+        "title": "L'Heure de classe",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Prends un screen assis à ta table de classe pendant un cours.",
+        "reward": "1 200 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Soirée chill",
+        "type": "voice",
+        "goal": 45,
+        "description": "Passe 45 minutes en vocal un soir de semaine. Compte uniquement le temps réel passé en vocal.",
+        "reward": "Rôle \"Zouave\" + 500 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Piplette",
+        "type": "messages",
+        "goal": 150,
+        "description": "Envoie 150 messages.",
+        "reward": "Rôle \"Tchateur\" + 200 IG",
+        "roleId": ""
+      },
+      {
+        "title": "Première heure RP",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Passe 1 heure en jeu sur School RP.",
+        "reward": "1 000 IG + Rôle \"Élève exemplaire\" + 1 500 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Cap des 120 messages",
+        "type": "messages",
+        "goal": 160,
+        "description": "Envoie 160 messages.",
+        "reward": "200 IG + 1 000 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Habitué du vocal",
+        "type": "voice",
+        "goal": 90,
+        "description": "Passe 1h30 en vocal cumulée. Le temps compte uniquement quand tu es vraiment en vocal.",
+        "reward": "1 700 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Invitation",
+        "type": "invite",
+        "goal": 4,
+        "description": "Invite 4 amis sur le Discord.",
+        "reward": "300 IG + Rôle \"Sociable\" + 1 000 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Cap des 300 messages",
+        "type": "messages",
+        "goal": 300,
+        "description": "Envoie 300 messages.",
+        "reward": "3 000 IG + 2 100 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Voix d'or",
+        "type": "voice",
+        "goal": 300,
+        "description": "Passe 5h en vocal. Compte uniquement le temps réel passé en vocal.",
+        "reward": "2 500 IG",
+        "roleId": ""
+      },
+      {
+        "title": "Sympa",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Prends un screen de toi où tu portes le proviseur.",
+        "reward": "Rôle \"Sous le bureau\" + 2 400 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Séance School RP II",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Passe 3h en jeu sur School RP.",
+        "reward": "Rôle \"Chômeur\" + 1 000 IG",
+        "roleId": ""
+      },
+      {
+        "title": "Cap des 500 messages",
+        "type": "messages",
+        "goal": 500,
+        "description": "Envoie 500 messages.",
+        "reward": "3 500 IG + 2 700 XP",
+        "roleId": ""
+      },
+      {
+        "title": "En véhicule",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Prends un screen de ton personnage sur un vélo en étant jardinier(è).",
+        "reward": "1 600 IG",
+        "roleId": ""
+      },
+      {
+        "title": "Cap des 700 messages",
+        "type": "messages",
+        "goal": 700,
+        "description": "Envoie 700 messages.",
+        "reward": "4 000 IG",
+        "roleId": ""
+      },
+      {
+        "title": "Staff en vue",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Prends un screen avec un membre du staff en jeu.",
+        "reward": "Rôle \"Discret\" + 3 200 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Marathon vocal",
+        "type": "voice",
+        "goal": 900,
+        "description": "Passe 15h en vocal. Compte seulement le temps réel en vocal.",
+        "reward": "3 000 IG + 3 300 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Élite de la Famille",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Prends une photo avec au moins 1 membre de 5 familles différentes.",
+        "reward": "Rôle \"Famous\" + 3 000 IG",
+        "roleId": ""
+      },
+      {
+        "title": "Le millier de messages",
+        "type": "messages",
+        "goal": 800,
+        "description": "Atteins 800 messages sur le serveur.",
+        "reward": "6 000 IG + 3 800 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Le casse-tête de la planque",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Trouve et prends un screen de l'endroit le plus haut ou caché de la map.",
+        "reward": "Rôle \"Ombre\" + 2 000 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Cap des 900 messages",
+        "type": "messages",
+        "goal": 900,
+        "description": "Envoie 900 messages.",
+        "reward": "6 500 IG + 4 100 XP",
+        "roleId": ""
+      },
+      {
+        "title": "Le chimiste de la rue",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Deviens chimiste au camp des caïds.",
+        "reward": "6 000 IG",
+        "roleId": ""
+      },
+      {
+        "title": "Le convoi exceptionnel",
+        "type": "manual",
+        "goal": 1,
+        "description": "[SchoolRP] Escorte un haut gradé ou un membre clé de la famille à travers la voiture sans te faire intercepter.",
+        "reward": "Rôle \"Braqueur\" + 5 000 IG + 4 600 XP",
+        "roleId": ""
+      }
+    ],
+    "tokenDropChannelId": "1553598784062099506",
+    "nextTokenDropAt": 1792961513838,
+    "commandLogChannelId": "1552844778326990848"
+  }
+}

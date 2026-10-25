@@ -1,0 +1,74 @@
+{
+  "1541074202180980746": {
+    "wallets": {
+      "1224384722893799538": {
+        "balance": 174,
+        "dailyStreak": 1,
+        "lastDailyClaim": "2026-10-03"
+      }
+    },
+    "activeDrop": {
+      "messageId": "1562167730012954719",
+      "channelId": "1553598784062099506",
+      "amount": 208,
+      "expiresAt": 1793125009619,
+      "claimedBy": null
+    }
+  },
+  "1474762274244788265": {
+    "wallets": {
+      "1224384722893799538": {
+        "balance": 46,
+        "dailyStreak": 5,
+        "lastDailyClaim": "2026-10-25"
+      },
+      "1404083681097814058": {
+        "balance": 25,
+        "dailyStreak": 1,
+        "lastDailyClaim": "2026-10-07"
+      },
+      "454947833879986186": {
+        "balance": 60,
+        "dailyStreak": 1,
+        "lastDailyClaim": "2026-10-17"
+      },
+      "561947186888179743": {
+        "balance": 100,
+        "dailyStreak": 1,
+        "lastDailyClaim": "2026-10-15"
+      },
+      "900865995520999445": {
+        "balance": 208,
+        "dailyStreak": 1,
+        "lastDailyClaim": "2026-10-12"
+      },
+      "1514731702176448609": {
+        "balance": 1025,
+        "dailyStreak": 1,
+        "lastDailyClaim": "2026-10-16"
+      },
+      "259476725690269707": {
+        "balance": 60,
+        "dailyStreak": 2,
+        "lastDailyClaim": "2026-10-17"
+      },
+      "999695415127588884": {
+        "balance": 130,
+        "dailyStreak": 3,
+        "lastDailyClaim": "2026-10-23"
+      },
+      "864998391541268491": {
+        "balance": 123,
+        "dailyStreak": 0,
+        "lastDailyClaim": null
+      }
+    },
+    "activeDrop": {
+      "messageId": "1563425714047426584",
+      "channelId": "1553630744826351626",
+      "amount": 123,
+      "expiresAt": 1793424935063,
+      "claimedBy": "864998391541268491"
+    }
+  }
+}

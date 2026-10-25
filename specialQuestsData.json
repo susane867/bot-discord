@@ -1,0 +1,109 @@
+{
+  "1541074202180980746": {
+    "completedQuestNumbers": [
+      51,
+      44
+    ],
+    "retryAt": {},
+    "offers": [
+      {
+        "questNumber": 43,
+        "status": "legendary",
+        "createdAt": 1791000921654,
+        "channelId": "1541074202730438700",
+        "progressByUser": {
+          "1224384722893799538": {
+            "progress": 0,
+            "messageCount": 0,
+            "voiceSeconds": 0,
+            "inviteCount": 0
+          },
+          "1132730883544195073": {
+            "progress": 0,
+            "messageCount": 0,
+            "voiceSeconds": 0,
+            "inviteCount": 0
+          }
+        },
+        "messageId": "1555795387858686023",
+        "proofSubmissions": {},
+        "proofRequests": {}
+      },
+      {
+        "questNumber": 50,
+        "status": "legendary",
+        "createdAt": 1791289898966,
+        "channelId": "1541074202730438700",
+        "progressByUser": {
+          "1224384722893799538": {
+            "progress": 0,
+            "messageCount": 5,
+            "voiceSeconds": 0,
+            "inviteCount": 0
+          }
+        },
+        "messageId": "1557007438144741387",
+        "proofSubmissions": {},
+        "proofRequests": {}
+      },
+      {
+        "questNumber": 49,
+        "status": "legendary",
+        "createdAt": 1791551960300,
+        "channelId": "1541074202730438700",
+        "progressByUser": {
+          "1224384722893799538": {
+            "progress": 0,
+            "messageCount": 5,
+            "voiceSeconds": 0,
+            "inviteCount": 0
+          }
+        },
+        "messageId": "1558106602341671001",
+        "proofSubmissions": {},
+        "proofRequests": {}
+      },
+      {
+        "questNumber": 47,
+        "status": "available",
+        "createdAt": 1792569343720,
+        "channelId": "1541074202730438700",
+        "progress": {
+          "progress": 0,
+          "messageCount": 0,
+          "voiceSeconds": 0,
+          "inviteCount": 0
+        },
+        "messageId": "1562373811234541589"
+      },
+      {
+        "questNumber": 30,
+        "status": "available",
+        "createdAt": 1792877994572,
+        "channelId": "1541074202730438700",
+        "progress": {
+          "progress": 0,
+          "messageCount": 0,
+          "voiceSeconds": 0,
+          "inviteCount": 0
+        },
+        "messageId": "1563668387526221836"
+      }
+    ],
+    "enabled": true,
+    "nextSpawnAt": 1793335953986,
+    "channelId": "1541074202730438700",
+    "specialQuestRoleId": "1541105273110794300"
+  },
+  "1474762274244788265": {
+    "completedQuestNumbers": [
+      51
+    ],
+    "retryAt": {},
+    "offers": [],
+    "enabled": false,
+    "nextSpawnAt": 1791502142156,
+    "channelId": "1555666399077072956",
+    "specialQuestRoleId": "1553642454962540584"
+  }
+}
