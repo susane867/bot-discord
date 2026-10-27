@@ -7978,13 +7978,13 @@ async function captureQuestProofMessage(message) {
             const downloadUrls = [...new Set([attachment.url, attachment.proxyURL].filter(Boolean))];
             for (const url of downloadUrls) {
                 try {
-                    const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+                    const response = await fetch(url, { signal: AbortSignal.timeout(45000) });
                     if (!response.ok) {
                         throw new Error(`Téléchargement impossible (${response.status}).`);
                     }
                     const downloadedFile = Buffer.from(await response.arrayBuffer());
-                    if (attachment.size && downloadedFile.length !== attachment.size) {
-                        throw new Error(`Taille téléchargée incorrecte (${downloadedFile.length} octets reçus, ${attachment.size} attendus).`);
+                    if (downloadedFile.length === 0) {
+                        throw new Error('Le fichier téléchargé est vide.');
                     }
                     fileBuffer = downloadedFile;
                     break;
@@ -8491,8 +8491,8 @@ setInterval(async () => {
 }, 5 * 60 * 1000);
 
 http.createServer((req, res) => {
-    res.write('Le bot Discord est en ligne !');
-    res.end();
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Le bot Discord est en ligne !');
 }).listen(process.env.PORT || 3000);
 
 client.login(DISCORD_TOKEN); // <-- Lancement final
