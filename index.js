@@ -3546,11 +3546,16 @@ const commands = [
 
     new SlashCommandBuilder()
         .setName('linkroblox')
-        .setDescription('Lie ton pseudo Roblox à ton compte Discord.')
+        .setDescription('Lie un pseudo Roblox à ton compte Discord.')
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
+        .addUserOption(option =>
+            option.setName('membre')
+                .setDescription('Membre à lier (réservé aux administrateurs)')
+                .setRequired(false)
+        )
         .addStringOption(option =>
             option.setName('pseudo')
-                .setDescription('Ton pseudo Roblox exact')
+                .setDescription('Pseudo Roblox exact')
                 .setRequired(true)
         ),
 
@@ -3949,6 +3954,14 @@ client.on('interactionCreate', async (interaction) => {
 
     if (commandName === 'linkroblox') {
         const robloxUsername = options.getString('pseudo')?.trim();
+        const selectedUser = options.getUser('membre');
+
+        if (selectedUser && !interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
+            return await interaction.reply({
+                content: '❌ Seuls les administrateurs peuvent lier un compte Roblox au nom d’un autre membre.',
+                flags: [MessageFlags.Ephemeral]
+            });
+        }
 
         if (!robloxUsername || robloxUsername.length < 3 || robloxUsername.length > 24) {
             return await interaction.reply({
@@ -3957,24 +3970,43 @@ client.on('interactionCreate', async (interaction) => {
             });
         }
 
+        let targetMember = interaction.member;
+        if (selectedUser) {
+            targetMember = await interaction.guild.members.fetch(selectedUser.id).catch(() => null);
+            if (!targetMember) {
+                return await interaction.reply({
+                    content: '❌ Ce compte n’est pas membre de ce serveur.',
+                    flags: [MessageFlags.Ephemeral]
+                });
+            }
+        }
+
         await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-        let existingLink;
+        let resolvedUser;
         try {
-            existingLink = await getLinkedRobloxAccount(interaction.guild.id, interaction.user.id);
+            resolvedUser = await resolveRobloxUser(robloxUsername);
         } catch (err) {
-            return await replyRobloxStorageError(interaction, err);
-        }
-        if (existingLink) {
+            console.error(`Erreur de résolution du pseudo Roblox "${robloxUsername}" :`, err);
             return await interaction.editReply({
-                content: `✅ Ton compte Discord est déjà lié à Roblox : **${existingLink.robloxUsername}**\nRecherche Roblox : https://www.roblox.com/search/users?keyword=${encodeURIComponent(existingLink.robloxUsername)}`,
+                content: '❌ Impossible de vérifier ce pseudo Roblox pour le moment. Réessaie plus tard.'
             });
         }
-
-        const resolvedUser = await resolveRobloxUser(robloxUsername);
         if (!resolvedUser) {
             return await interaction.editReply({
                 content: `⚠️ Le pseudo **${robloxUsername}** est introuvable sur Roblox. Vérifie l’orthographe et réessaie.`
+            });
+        }
+
+        let existingLink;
+        try {
+            existingLink = await getLinkedRobloxAccount(interaction.guild.id, targetMember.id);
+        } catch (err) {
+            return await replyRobloxStorageError(interaction, err);
+        }
+        if (existingLink && !selectedUser) {
+            return await interaction.editReply({
+                content: `✅ Ton compte Discord est déjà lié à Roblox : **${existingLink.robloxUsername}**\nRecherche Roblox : https://www.roblox.com/search/users?keyword=${encodeURIComponent(existingLink.robloxUsername)}`
             });
         }
 
@@ -3987,7 +4019,7 @@ client.on('interactionCreate', async (interaction) => {
         };
 
         try {
-            await setLinkedRobloxAccount(interaction.guild.id, interaction.user.id, linkPayload);
+            await setLinkedRobloxAccount(interaction.guild.id, targetMember.id, linkPayload);
         } catch (err) {
             return await replyRobloxStorageError(interaction, err);
         }
@@ -3996,19 +4028,19 @@ client.on('interactionCreate', async (interaction) => {
 
         if (linkedRole) {
             try {
-                await interaction.member.roles.add(linkedRole);
+                await targetMember.roles.add(linkedRole);
             } catch (err) {
-                console.error('Impossible d’ajouter le rôle Roblox lié :', err);
+                console.error(`Impossible d’ajouter le rôle Roblox lié à ${targetMember.id} :`, err);
             }
         }
 
         const profileEmbed = new EmbedBuilder()
-            .setTitle('✅ Compte Roblox lié')
+            .setTitle(existingLink ? '🔄 Compte Roblox mis à jour' : '✅ Compte Roblox lié')
             .setColor(0x00A2FF)
             .setThumbnail(resolvedUser.avatarUrl)
             .addFields(
                 { name: 'Pseudo Roblox', value: `**${resolvedUser.robloxUsername}**`, inline: true },
-                { name: 'Compte Discord', value: `${interaction.user}`, inline: true },
+                { name: 'Compte Discord', value: `${targetMember.user}`, inline: true },
                 { name: 'Profil Roblox', value: `[Ouvrir le profil](${resolvedUser.profileUrl})`, inline: false },
                 { name: 'Statut', value: '✅ Liaison confirmée', inline: false }
             )
