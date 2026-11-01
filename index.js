@@ -3675,8 +3675,7 @@ const commands = [
 
     new SlashCommandBuilder()
         .setName('config')
-        .setDescription('Ouvre le panneau de configuration du bot.')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+        .setDescription('Ouvre le panneau de configuration du bot.'),
 
     new SlashCommandBuilder()
         .setName('admin')
@@ -3686,7 +3685,6 @@ const commands = [
     new SlashCommandBuilder()
         .setName('level')
         .setDescription('Affiche ton niveau ou celui d’un membre.')
-        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
         .addUserOption(option =>
             option.setName('membre')
                 .setDescription('Le membre à consulter')
@@ -3754,8 +3752,7 @@ const commands = [
 
     new SlashCommandBuilder()
         .setName('roulette')
-        .setDescription('Joue à la roulette ; gagne des jetons avec /quotidien et achète des tours via /boutique.')
-        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
+        .setDescription('Joue à la roulette ; gagne des jetons avec /quotidien et achète des tours via /boutique.'),
 
     new SlashCommandBuilder()
         .setName('soldejetons')
@@ -4569,6 +4566,13 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if (commandName === 'config' || commandName === 'admin') {
+        if (commandName === 'config' &&
+            !interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
+            return await interaction.reply({
+                content: '❌ Réservé aux administrateurs.',
+                flags: [MessageFlags.Ephemeral]
+            });
+        }
         return await interaction.reply({
             embeds: [buildConfigPanelEmbed(commandName === 'admin' ? 'admin' : 'home', interaction.guild.id)],
             components: buildConfigPanelComponents(commandName === 'admin' ? 'admin' : 'home', interaction.guild.id),
