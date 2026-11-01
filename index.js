@@ -3444,7 +3444,7 @@ async function alertDeletedBotLog(message, deleter) {
 }
 
 // Seules ces commandes sont disponibles avec une installation utilisateur.
-const PROFILE_COMMANDS = new Set(['config', 'level', 'roulette']);
+const PROFILE_COMMANDS = new Set(['level', 'roulette', 'quest']);
 
 // Enregistrement global de toutes les commandes
 const commands = [
@@ -3675,7 +3675,8 @@ const commands = [
 
     new SlashCommandBuilder()
         .setName('config')
-        .setDescription('Ouvre le panneau de configuration du bot.'),
+        .setDescription('Ouvre le panneau de configuration du bot.')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     new SlashCommandBuilder()
         .setName('admin')
