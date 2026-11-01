@@ -2368,6 +2368,7 @@ const ADMIN_CONFIG_PAGES = {
     specialquests: { title: 'Apparitions spéciales', description: 'Active/désactive les apparitions automatiques ou lance une quête disponible maintenant.' },
     normalquests: { title: 'Quêtes normales', description: 'Active ou mets en pause le parcours normal du serveur.' },
     validatorrole: { title: 'Rôles validateurs', description: 'Choisis les rôles autorisés à valider les quêtes manuelles.' },
+    robloxlink: { title: 'Liens Roblox', description: 'Choisis le rôle autorisé à lier un pseudo Roblox au compte d’un autre membre. Les administrateurs conservent toujours cet accès.' },
     rankup: { title: 'Annonces Rankup', description: 'Configure les annonces automatiques envoyées quand un membre reçoit le rôle Test BMF ou Membre BMF.', channelId: 'rankupAnnouncementChannelId' },
     tokens: { title: 'Jetons et boutique', description: 'Configure les prix et récompenses de l’économie de jetons. Les commandes membres sont `/soldejetons`, `/quotidien` et `/boutique` ; les commandes de gestion sont `/dropjetons`, `/setdropjetons` et `/resetroulette`.', channelId: 'tokenDropChannelId' }
 };
@@ -2548,6 +2549,7 @@ function buildConfigPanelEmbed(category, guildId) {
                 { name: 'Logs', value: `Généraux : ${config.logChannelId ? `<#${config.logChannelId}>` : 'non configuré'}\nCommandes : ${config.commandLogChannelId ? `<#${config.commandLogChannelId}>` : 'non configuré'}\nInvitations : ${config.inviteLogChannelId ? `<#${config.inviteLogChannelId}>` : 'non configuré'}\nMessages supprimés : **${getBotLogSettings(guildId).modules.deletedMessages.enabled ? 'activés' : 'désactivés'}**`, inline: false },
                 { name: 'Quêtes', value: `Normales : **${areNormalQuestsEnabled(guildId) ? 'activées' : 'désactivées'}**\nSalon des preuves : ${config.proofChannelId ? `<#${config.proofChannelId}>` : 'non configuré'}\nLogs : ${config.questLogChannelId ? `<#${config.questLogChannelId}>` : 'non configuré'}`, inline: false },
                 { name: 'Spéciales', value: `Salon : ${config.specialQuestChannelId ? `<#${config.specialQuestChannelId}>` : 'non configuré'}\nRôle : ${config.specialQuestRoleId ? `<@&${config.specialQuestRoleId}>` : 'non configuré'}`, inline: false },
+                { name: 'Roblox', value: `Rôle autorisé à lier les comptes des membres : ${config.robloxLinkerRoleId ? `<@&${config.robloxLinkerRoleId}>` : 'non configuré'}`, inline: false },
                 { name: 'Jetons', value: `Cadeaux automatiques : ${config.tokenDropChannelId ? `<#${config.tokenDropChannelId}>` : 'désactivés'}\nBoutique : **${getTokenEconomySettings(guildId).spinCost} jetons / tour**`, inline: false },
                 { name: 'Rankup', value: `Salon : ${rankupSettings.channelId ? `<#${rankupSettings.channelId}>` : 'non configuré'}\nRôle Test : ${rankupSettings.testRoleId ? `<@&${rankupSettings.testRoleId}>` : 'non configuré'}\nRôle Membre : ${rankupSettings.memberRoleId ? `<@&${rankupSettings.memberRoleId}>` : 'non configuré'}`, inline: false }
             )
@@ -2582,6 +2584,13 @@ function buildConfigPanelEmbed(category, guildId) {
             }
             if (key === 'specialquest' && config.specialQuestRoleId) {
                 embed.addFields({ name: 'Rôle mentionné', value: `<@&${config.specialQuestRoleId}>`, inline: true });
+            }
+            if (key === 'robloxlink') {
+                embed.addFields({
+                    name: 'Rôle autorisé',
+                    value: config.robloxLinkerRoleId ? `<@&${config.robloxLinkerRoleId}>` : 'Non configuré — seuls les administrateurs peuvent lier le compte d’un autre membre.',
+                    inline: false
+                });
             }
             if (key === 'rankup') {
                 embed.addFields(
@@ -2834,6 +2843,7 @@ function buildConfigPanelComponents(category, guildId) {
             ['normalquests', 'Quêtes normales'],
             ['specialquests', 'Apparitions spéciales'],
             ['validatorrole', 'Rôles validateurs'],
+            ['robloxlink', 'Liens Roblox'],
             ['rankup', 'Annonces Rankup'],
             ['deletedmessages', 'Messages supprimés'],
             ['tokens', 'Jetons et boutique']
@@ -2882,13 +2892,27 @@ function buildConfigPanelComponents(category, guildId) {
                         .setStyle(ButtonStyle.Danger)
                 ));
             }
-            if (key === 'questlogs' || key === 'specialquest' || key === 'validatorrole') {
+            if (key === 'questlogs' || key === 'specialquest' || key === 'validatorrole' || key === 'robloxlink') {
                 rows.push(new ActionRowBuilder().addComponents(
                     new RoleSelectMenuBuilder()
                         .setCustomId(`config_admin_role_${key}`)
-                        .setPlaceholder(key === 'validatorrole' ? 'Choisir un rôle validateur' : 'Choisir le rôle à mentionner')
+                        .setPlaceholder(
+                            key === 'validatorrole'
+                                ? 'Choisir un rôle validateur'
+                                : key === 'robloxlink'
+                                    ? 'Choisir le rôle autorisé à lier les comptes'
+                                    : 'Choisir le rôle à mentionner'
+                        )
                         .setMinValues(1)
                         .setMaxValues(1)
+                ));
+            }
+            if (key === 'robloxlink' && (savedConfigs[guildId] || {}).robloxLinkerRoleId) {
+                rows.push(new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('config_admin_robloxlink_role_clear')
+                        .setLabel('Retirer le rôle autorisé')
+                        .setStyle(ButtonStyle.Danger)
                 ));
             }
             if (key === 'rankup') {
@@ -3548,15 +3572,15 @@ const commands = [
         .setName('linkroblox')
         .setDescription('Lie un pseudo Roblox à ton compte Discord.')
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
-        .addUserOption(option =>
-            option.setName('membre')
-                .setDescription('Membre à lier (réservé aux administrateurs)')
-                .setRequired(false)
-        )
         .addStringOption(option =>
             option.setName('pseudo')
                 .setDescription('Pseudo Roblox exact')
                 .setRequired(true)
+        )
+        .addUserOption(option =>
+            option.setName('membre')
+                .setDescription('Membre à lier (réservé au rôle configuré ou aux admins)')
+                .setRequired(false)
         ),
 
     new SlashCommandBuilder()
@@ -3956,9 +3980,12 @@ client.on('interactionCreate', async (interaction) => {
         const robloxUsername = options.getString('pseudo')?.trim();
         const selectedUser = options.getUser('membre');
 
-        if (selectedUser && !interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
+        const configuredLinkerRoleId = savedConfigs[interaction.guild.id]?.robloxLinkerRoleId;
+        const canLinkForOthers = interaction.memberPermissions?.has(PermissionFlagsBits.Administrator) ||
+            Boolean(configuredLinkerRoleId && interaction.member.roles.cache.has(configuredLinkerRoleId));
+        if (selectedUser && !canLinkForOthers) {
             return await interaction.reply({
-                content: '❌ Seuls les administrateurs peuvent lier un compte Roblox au nom d’un autre membre.',
+                content: '❌ Seuls les administrateurs et les membres ayant le rôle autorisé peuvent lier un compte Roblox au nom d’un autre membre.',
                 flags: [MessageFlags.Ephemeral]
             });
         }
@@ -5675,6 +5702,8 @@ client.on('interactionCreate', async interaction => {
                 : [];
             if (!roles.includes(roleId)) roles.push(roleId);
             savedConfigs[interaction.guild.id].questValidatorRoleIds = roles;
+        } else if (key === 'robloxlink') {
+            savedConfigs[interaction.guild.id].robloxLinkerRoleId = roleId;
         } else {
             return await interaction.reply({ content: '❌ Réglage de rôle inconnu.', flags: [MessageFlags.Ephemeral] });
         }
@@ -6105,6 +6134,21 @@ client.on('interactionCreate', async interaction => {
             return await interaction.update({
                 embeds: [buildConfigPanelEmbed('logModule_deletedMessages', interaction.guild.id)],
                 components: buildConfigPanelComponents('logModule_deletedMessages', interaction.guild.id)
+            });
+        }
+
+        if (interaction.customId === 'config_admin_robloxlink_role_clear') {
+            if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
+                return await interaction.reply({ content: '❌ Réservé aux administrateurs.', flags: [MessageFlags.Ephemeral] });
+            }
+            const config = savedConfigs[interaction.guild.id];
+            if (config) {
+                delete config.robloxLinkerRoleId;
+                saveConfigsToFile();
+            }
+            return await interaction.update({
+                embeds: [buildConfigPanelEmbed('admin_robloxlink', interaction.guild.id)],
+                components: buildConfigPanelComponents('admin_robloxlink', interaction.guild.id)
             });
         }
 
