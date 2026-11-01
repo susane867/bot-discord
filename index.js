@@ -1,6 +1,7 @@
 const { 
     Client, 
     GatewayIntentBits, 
+    AuditLogEvent,
     PermissionFlagsBits, 
     REST, 
     Routes, 
@@ -27,6 +28,7 @@ const { loadImage } = require('@napi-rs/canvas');
 const path = require('path');
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+const DELETED_LOG_ALERT_USER_ID = process.env.DELETED_LOG_ALERT_USER_ID?.trim();
 if (!DISCORD_TOKEN) {
     throw new Error('DISCORD_TOKEN est manquant. Définis-le dans le fichier .env ou dans les variables d’environnement.');
 }
@@ -3339,7 +3341,29 @@ async function sendCommandLog(interaction) {
     await channel.send({ embeds: [embed] }).catch(err => console.error('Erreur log commande :', err));
 }
 
-async function sendDeletedMessageLog(message) {
+async function findMessageDeletionExecutor(message, deletedAt) {
+    if (!message.guild || !message.author) return null;
+
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    try {
+        const auditLogs = await message.guild.fetchAuditLogs({
+            type: AuditLogEvent.MessageDelete,
+            limit: 10
+        });
+        const matches = [...auditLogs.entries.values()].filter(entry =>
+            entry.target?.id === message.author.id &&
+            entry.extra?.channel?.id === message.channelId &&
+            Number(entry.extra?.count) === 1 &&
+            Math.abs(entry.createdTimestamp - deletedAt) <= 10_000
+        );
+        return matches.length === 1 ? matches[0].executor : null;
+    } catch (err) {
+        console.warn(`Impossible de consulter le journal d’audit pour la suppression du message ${message.id} :`, err);
+        return null;
+    }
+}
+
+async function sendDeletedMessageLog(message, deletedAt) {
     if (!message.guild || !message.author || message.author.bot) return;
     const settings = getBotLogSettings(message.guild.id);
     const moduleSettings = settings.modules.deletedMessages;
@@ -3348,6 +3372,7 @@ async function sendDeletedMessageLog(message) {
     const channelId = moduleSettings.channelId || settings.defaultChannelId;
     const channel = channelId ? await message.guild.channels.fetch(channelId).catch(() => null) : null;
     if (!channel || !channel.isTextBased()) return;
+    const deleter = await findMessageDeletionExecutor(message, deletedAt);
 
     const content = typeof message.content === 'string' && message.content.trim()
         ? message.content.slice(0, 3500)
@@ -3369,7 +3394,7 @@ async function sendDeletedMessageLog(message) {
 
     const embed = new EmbedBuilder()
         .setTitle('Message supprimé')
-        .setDescription(`**Auteur du message :** ${message.author.tag}\n**Salon :** ${message.channel}\n\n**Contenu :**\n${content}`)
+        .setDescription(`**Auteur du message :** ${message.author.tag}\n**Supprimé par :** ${deleter ? `<@${deleter.id}>` : 'Indéterminé (aucune entrée d’audit correspondante)'}\n**Salon :** ${message.channel}\n\n**Contenu :**\n${content}`)
         .setColor(parseInt(moduleSettings.color, 16))
         .setTimestamp(message.createdAt || new Date());
     if (moduleSettings.avatarUrl) embed.setThumbnail(moduleSettings.avatarUrl);
@@ -3385,6 +3410,35 @@ async function sendDeletedMessageLog(message) {
 
     await channel.send({ embeds: [embed], allowedMentions: { parse: [] } })
         .catch(err => console.error('Erreur log message supprimé :', err));
+}
+
+async function alertDeletedBotLog(message, deleter) {
+    if (!DELETED_LOG_ALERT_USER_ID) {
+        console.error('Un log de suppression du bot a été effacé, mais DELETED_LOG_ALERT_USER_ID n’est pas configuré.');
+        return;
+    }
+    if (!/^\d{17,20}$/.test(DELETED_LOG_ALERT_USER_ID)) {
+        console.error('DELETED_LOG_ALERT_USER_ID doit contenir un identifiant Discord valide.');
+        return;
+    }
+
+    const sourceEmbed = message.embeds?.[0];
+    const alertEmbed = new EmbedBuilder()
+        .setTitle('⚠️ Un log de suppression a été effacé')
+        .setDescription(`Un log publié par le bot vient d’être supprimé.\n\n**Supprimé par :** ${deleter ? `<@${deleter.id}>` : 'Indéterminé (aucune entrée d’audit correspondante)'}\n**Serveur :** ${message.guild?.name || 'Inconnu'}\n**Salon des logs :** <#${message.channelId}>\n**ID du log effacé :** ${message.id}`)
+        .addFields({
+            name: 'Contenu du log effacé',
+            value: sourceEmbed?.description?.slice(0, 1024) || 'Contenu indisponible.'
+        })
+        .setColor(0xE17755)
+        .setTimestamp();
+
+    try {
+        const recipient = await client.users.fetch(DELETED_LOG_ALERT_USER_ID);
+        await recipient.send({ embeds: [alertEmbed], allowedMentions: { parse: [] } });
+    } catch (err) {
+        console.error(`Impossible d’envoyer l’alerte de suppression de log à ${DELETED_LOG_ALERT_USER_ID} :`, err);
+    }
 }
 
 // Enregistrement global de toutes les commandes
@@ -8179,7 +8233,14 @@ setInterval(async () => {
 }, 10_000);
 
 client.on('messageDelete', async message => {
-    await sendDeletedMessageLog(message);
+    const deletedAt = Date.now();
+    if (message.author?.id === client.user?.id &&
+        message.embeds?.some(embed => embed.title === 'Message supprimé')) {
+        const deleter = await findMessageDeletionExecutor(message, deletedAt);
+        await alertDeletedBotLog(message, deleter);
+        return;
+    }
+    await sendDeletedMessageLog(message, deletedAt);
 });
 
 async function captureQuestProofMessage(message) {
