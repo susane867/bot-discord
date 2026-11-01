@@ -392,7 +392,7 @@ function savePersistentJsonFile(filePath, data) {
 async function initializePersistentState() {
     if (!useSupabaseStorage) return;
 
-    const rows = await supabaseTableRequest(`${SUPABASE_PERSISTENT_STATE_TABLE}?select=key,value`);
+    const rows = await supabaseTableRequest(`${SUPABASE_PERSISTENT_STATE_TABLE}?select=*`);
     const storedValues = new Map(rows.map(row => [row.key, row.value]));
 
     for (const filePath of SUPABASE_PERSISTENT_FILES) {
