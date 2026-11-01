@@ -2,6 +2,8 @@ const {
     Client, 
     GatewayIntentBits, 
     AuditLogEvent,
+    ApplicationIntegrationType,
+    InteractionContextType,
     PermissionFlagsBits, 
     REST, 
     Routes, 
@@ -3441,6 +3443,9 @@ async function alertDeletedBotLog(message, deleter) {
     }
 }
 
+// Seules ces commandes sont disponibles avec une installation utilisateur.
+const PROFILE_COMMANDS = new Set(['config', 'level', 'roulette']);
+
 // Enregistrement global de toutes les commandes
 const commands = [
     new SlashCommandBuilder()
@@ -3863,7 +3868,14 @@ const commands = [
                 .setDescription('Texte du footer (optionnel)')
                 .setRequired(false)
         ),
-].map(command => command.toJSON());
+].map(command => {
+    command.setContexts(InteractionContextType.Guild);
+    command.setIntegrationTypes(
+        ApplicationIntegrationType.GuildInstall,
+        ...(PROFILE_COMMANDS.has(command.name) ? [ApplicationIntegrationType.UserInstall] : [])
+    );
+    return command.toJSON();
+});
 
 const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
 (async () => {
