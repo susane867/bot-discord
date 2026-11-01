@@ -4161,12 +4161,21 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         const pageEntries = entries.slice((requestedPage - 1) * pageSize, requestedPage * pageSize);
-        const fields = pageEntries.map((account, index) => {
+        const namedPageEntries = await Promise.all(pageEntries.map(async account => {
+            try {
+                const member = await interaction.guild.members.fetch(account.discordId);
+                return { ...account, discordName: member.displayName || member.user.globalName || member.user.username };
+            } catch (err) {
+                console.error(`Impossible de récupérer le membre Discord ${account.discordId} pour /robloxliens :`, err);
+                return { ...account, discordName: `Membre introuvable (ID ${account.discordId})` };
+            }
+        }));
+        const fields = namedPageEntries.map((account, index) => {
             const linkedDate = account.linkedAt && !Number.isNaN(Date.parse(account.linkedAt))
                 ? new Date(account.linkedAt).toLocaleDateString('fr-FR')
                 : 'Date inconnue';
             return {
-                name: `#${(requestedPage - 1) * pageSize + index + 1} · <@${account.discordId}>`,
+                name: `#${(requestedPage - 1) * pageSize + index + 1} · ${account.discordName}`,
                 value: `🎮 [${account.robloxUsername}](${account.profileUrl})\n📅 Lié le ${linkedDate}`,
                 inline: false
             };
@@ -8756,7 +8765,12 @@ setInterval(async () => {
         const guildConfig = savedConfigs[guild.id] || {};
         if (!guildConfig.tokenDropChannelId) continue;
 
-        const nextDropAt = Number(guildConfig.nextTokenDropAt) || 0;
+        const nextDropAt = Number(guildConfig.nextTokenDropAt);
+        if (!Number.isFinite(nextDropAt) || nextDropAt <= 0) {
+            guildConfig.nextTokenDropAt = Date.now() + getRandomTokenDropDelay();
+            saveConfigsToFile();
+            continue;
+        }
         if (nextDropAt > Date.now()) continue;
 
         const tokenData = loadTokensData();
@@ -8767,15 +8781,20 @@ setInterval(async () => {
             continue;
         }
 
+        guildConfig.nextTokenDropAt = Date.now() + getRandomTokenDropDelay();
+        saveConfigsToFile();
+
         try {
             const channel = await guild.channels.fetch(guildConfig.tokenDropChannelId);
             if (!channel?.isTextBased() || typeof channel.send !== 'function') {
                 throw new Error('Le salon configuré pour les cadeaux de jetons n’est pas textuel.');
             }
             const amount = 100 + Math.floor(Math.random() * 201);
-            await publishTokenDrop(guild, channel, amount);
-            guildConfig.nextTokenDropAt = Date.now() + getRandomTokenDropDelay();
-            saveConfigsToFile();
+            const dropMessage = await publishTokenDrop(guild, channel, amount);
+            if (!dropMessage) {
+                guildConfig.nextTokenDropAt = Date.now() + 6 * 60 * 60 * 1000;
+                saveConfigsToFile();
+            }
         } catch (err) {
             console.error(`Erreur lors du lancement automatique du cadeau de jetons sur ${guild.name} :`, err);
             guildConfig.nextTokenDropAt = Date.now() + 60 * 60 * 1000;
