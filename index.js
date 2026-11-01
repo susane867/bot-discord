@@ -3869,7 +3869,10 @@ const commands = [
                 .setRequired(false)
         ),
 ].map(command => {
-    command.setContexts(InteractionContextType.Guild);
+    command.setContexts(
+        InteractionContextType.Guild,
+        ...(PROFILE_COMMANDS.has(command.name) ? [InteractionContextType.BotDM] : [])
+    );
     command.setIntegrationTypes(
         ApplicationIntegrationType.GuildInstall,
         ...(PROFILE_COMMANDS.has(command.name) ? [ApplicationIntegrationType.UserInstall] : [])
@@ -3937,6 +3940,12 @@ client.on('interactionCreate', async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
     const { commandName, options } = interaction;
+    if (!interaction.guild && PROFILE_COMMANDS.has(commandName)) {
+        return await interaction.reply({
+            content: 'Utilise cette commande dans un serveur où le bot est présent.'
+        });
+    }
+
     if (commandName === 'roulette' || commandName === 'spin') {
         if ((savedConfigs[interaction.guild.id] || {}).rouletteEnabled === false) {
             return await interaction.reply({ content: '⏸️ La roulette est désactivée sur ce serveur.' });
