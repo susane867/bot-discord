@@ -31,8 +31,18 @@ if (!DISCORD_TOKEN) {
     throw new Error('DISCORD_TOKEN est manquant. Définis-le dans le fichier .env ou dans les variables d’environnement.');
 }
 const CLIENT_ID = '1535340152363163678';
-const CONFIG_FILE = './config.json';
-const ROBLOX_LINKS_FILE = './robloxLinks.json';
+const CONFIG_FILE = path.join(__dirname, 'config.json');
+const ROBLOX_LINKS_FILE = path.resolve(
+    process.env.ROBLOX_LINKS_FILE || path.join(__dirname, 'robloxLinks.json')
+);
+const SUPABASE_URL = process.env.SUPABASE_URL?.replace(/\/+$/, '');
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const useSupabaseStorage = Boolean(SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY);
+const SUPABASE_PERSISTENT_STATE_TABLE = 'bot_persistent_state';
+
+if (Boolean(SUPABASE_URL) !== Boolean(SUPABASE_SERVICE_ROLE_KEY)) {
+    throw new Error('SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY doivent être configurées ensemble.');
+}
 
 const ROLES = {
     WARN_1: '1474788176093646858',
@@ -122,13 +132,24 @@ function getRandomSpecialSpawnDelay() {
     return Math.floor((1 + Math.random() * 6) * DAY_MS);
 }
 
-const QUESTS_FILE = './questsData.json';
-const SPECIAL_QUESTS_FILE = './specialQuestsData.json';
-const QUEST_PROOF_REQUESTS_FILE = './questProofRequests.json';
-const ROULETTE_FILE = './rouletteData.json';
+const QUESTS_FILE = path.join(__dirname, 'questsData.json');
+const SPECIAL_QUESTS_FILE = path.join(__dirname, 'specialQuestsData.json');
+const QUEST_PROOF_REQUESTS_FILE = path.join(__dirname, 'questProofRequests.json');
+const ROULETTE_FILE = path.join(__dirname, 'rouletteData.json');
 const LEVELS_FILE = path.join(__dirname, 'levelsData.json');
 const LEVELS_BACKUP_FILE = path.join(__dirname, 'levelsData.json.bak');
-const TOKENS_FILE = './tokensData.json';
+const TOKENS_FILE = path.join(__dirname, 'tokensData.json');
+const SUPABASE_PERSISTENT_FILES = [
+    CONFIG_FILE,
+    QUESTS_FILE,
+    SPECIAL_QUESTS_FILE,
+    QUEST_PROOF_REQUESTS_FILE,
+    ROULETTE_FILE,
+    LEVELS_FILE,
+    TOKENS_FILE
+];
+let persistentStateWriteQueue = Promise.resolve();
+let persistentStateWriteError = null;
 const TOKEN_DROP_EMOJI = '🎁';
 const ROULETTE_SPIN_TOKEN_COST = 100;
 const MAX_PAID_ROULETTE_SPINS = 10;
@@ -176,7 +197,7 @@ function loadRouletteData() {
 }
 
 function saveRouletteData(data) {
-    fs.writeFileSync(ROULETTE_FILE, JSON.stringify(data, null, 2));
+    savePersistentJsonFile(ROULETTE_FILE, data);
 }
 
 function loadTokensData() {
@@ -192,7 +213,7 @@ function loadTokensData() {
 }
 
 function saveTokensData(data) {
-    fs.writeFileSync(TOKENS_FILE, JSON.stringify(data, null, 2));
+    savePersistentJsonFile(TOKENS_FILE, data);
 }
 
 function getTokenWallet(data, guildId, userId) {
@@ -319,7 +340,133 @@ function getRandomTokenDropDelay() {
     return (24 + Math.floor(Math.random() * 49)) * 60 * 60 * 1000;
 }
 
-function loadRobloxLinksData() {
+async function supabaseTableRequest(table, query, options = {}) {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}${query}`, {
+        ...options,
+        headers: {
+            apikey: SUPABASE_SERVICE_ROLE_KEY,
+            Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+            'Content-Type': 'application/json',
+            ...options.headers
+        }
+    });
+
+    if (!response.ok) {
+        const details = await response.text();
+        throw new Error(`Erreur Supabase (${response.status}) : ${details}`);
+    }
+
+    const body = await response.text();
+    if (!body) return null;
+
+    try {
+        return JSON.parse(body);
+    } catch (err) {
+        throw new Error('Supabase a renvoyé une réponse JSON invalide.', { cause: err });
+    }
+}
+
+function queuePersistentStateWrite(filePath, data) {
+    if (!useSupabaseStorage) return;
+
+    const key = path.basename(filePath);
+    const value = JSON.parse(JSON.stringify(data));
+    persistentStateWriteQueue = persistentStateWriteQueue.then(async () => {
+        await supabaseTableRequest(`${SUPABASE_PERSISTENT_STATE_TABLE}?on_conflict=key`, {
+            method: 'POST',
+            headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+            body: JSON.stringify({ key, value })
+        });
+        persistentStateWriteError = null;
+    }).catch(err => {
+        persistentStateWriteError = err;
+        console.error(`Erreur de sauvegarde Supabase pour ${key} :`, err);
+    });
+}
+
+function savePersistentJsonFile(filePath, data) {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    queuePersistentStateWrite(filePath, data);
+}
+
+async function initializePersistentState() {
+    if (!useSupabaseStorage) return;
+
+    const rows = await supabaseTableRequest(`${SUPABASE_PERSISTENT_STATE_TABLE}?select=key,value`);
+    const storedValues = new Map(rows.map(row => [row.key, row.value]));
+
+    for (const filePath of SUPABASE_PERSISTENT_FILES) {
+        const key = path.basename(filePath);
+        if (storedValues.has(key)) {
+            const value = storedValues.get(key);
+            if (!value || typeof value !== 'object' || Array.isArray(value)) {
+                throw new TypeError(`Les données Supabase pour ${key} ont un format invalide.`);
+            }
+            fs.writeFileSync(filePath, JSON.stringify(value, null, 2));
+            continue;
+        }
+
+        let value = {};
+        if (fs.existsSync(filePath)) {
+            try {
+                value = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            } catch (err) {
+                throw new Error(`Impossible d’importer ${key} dans Supabase : le JSON local est invalide.`, { cause: err });
+            }
+        }
+        if (!value || typeof value !== 'object' || Array.isArray(value)) {
+            throw new TypeError(`Les données locales de ${key} ont un format invalide.`);
+        }
+        await supabaseTableRequest(`${SUPABASE_PERSISTENT_STATE_TABLE}?on_conflict=key`, {
+            method: 'POST',
+            headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+            body: JSON.stringify({ key, value })
+        });
+        fs.writeFileSync(filePath, JSON.stringify(value, null, 2));
+        console.info(`Données importées dans Supabase : ${key}`);
+    }
+
+    if (fs.existsSync(CONFIG_FILE)) {
+        try {
+            const rawConfig = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+            if (rawConfig && typeof rawConfig === 'object' && !Array.isArray(rawConfig)) {
+                savedConfigs = rawConfig;
+            } else {
+                throw new TypeError('La configuration synchronisée n’est pas un objet JSON.');
+            }
+        } catch (err) {
+            throw new Error('Impossible de charger la configuration persistante depuis Supabase.', { cause: err });
+        }
+    }
+}
+
+async function supabaseRobloxRequest(query, options = {}) {
+    return await supabaseTableRequest('bot_roblox_links', query, options);
+}
+
+async function loadRobloxLinksData() {
+    if (useSupabaseStorage) {
+        const rows = await supabaseRobloxRequest('?select=guild_id,discord_id,account');
+        return {
+            linked: Object.fromEntries(rows.map(row => [
+                getRobloxLinkKey(row.guild_id, row.discord_id),
+                row.account
+            ])),
+            pending: {}
+        };
+    }
+
+    const legacyFile = path.join(__dirname, 'robloxLinks.json');
+    if (
+        ROBLOX_LINKS_FILE !== path.resolve(legacyFile) &&
+        !fs.existsSync(ROBLOX_LINKS_FILE) &&
+        fs.existsSync(legacyFile)
+    ) {
+        fs.mkdirSync(path.dirname(ROBLOX_LINKS_FILE), { recursive: true });
+        fs.copyFileSync(legacyFile, ROBLOX_LINKS_FILE);
+        console.info('Données Roblox migrées vers le stockage configuré.');
+    }
+
     if (fs.existsSync(ROBLOX_LINKS_FILE)) {
         try {
             const raw = JSON.parse(fs.readFileSync(ROBLOX_LINKS_FILE, 'utf8'));
@@ -339,14 +486,30 @@ function getRobloxLinkKey(guildId, userId) {
     return `${guildId}:${userId}`;
 }
 
-function getLinkedRobloxAccount(guildId, userId) {
-    const data = loadRobloxLinksData();
+async function getLinkedRobloxAccount(guildId, userId) {
+    if (useSupabaseStorage) {
+        const rows = await supabaseRobloxRequest(
+            `?guild_id=eq.${encodeURIComponent(guildId)}&discord_id=eq.${encodeURIComponent(userId)}&select=account`
+        );
+        return rows[0]?.account || null;
+    }
+
+    const data = await loadRobloxLinksData();
     const key = getRobloxLinkKey(guildId, userId);
     return data.linked && data.linked[key] ? data.linked[key] : null;
 }
 
-function setLinkedRobloxAccount(guildId, userId, payload) {
-    const data = loadRobloxLinksData();
+async function setLinkedRobloxAccount(guildId, userId, payload) {
+    if (useSupabaseStorage) {
+        await supabaseRobloxRequest('?on_conflict=guild_id,discord_id', {
+            method: 'POST',
+            headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+            body: JSON.stringify({ guild_id: guildId, discord_id: userId, account: payload })
+        });
+        return;
+    }
+
+    const data = await loadRobloxLinksData();
     const key = getRobloxLinkKey(guildId, userId);
     data.linked = data.linked || {};
     data.linked[key] = payload;
@@ -356,12 +519,32 @@ function setLinkedRobloxAccount(guildId, userId, payload) {
     saveRobloxLinksData(data);
 }
 
-function removeLinkedRobloxAccount(guildId, userId) {
-    const data = loadRobloxLinksData();
+async function removeLinkedRobloxAccount(guildId, userId) {
+    if (useSupabaseStorage) {
+        await supabaseRobloxRequest(
+            `?guild_id=eq.${encodeURIComponent(guildId)}&discord_id=eq.${encodeURIComponent(userId)}`,
+            { method: 'DELETE' }
+        );
+        return;
+    }
+
+    const data = await loadRobloxLinksData();
     const key = getRobloxLinkKey(guildId, userId);
     data.linked = data.linked || {};
     delete data.linked[key];
     saveRobloxLinksData(data);
+}
+
+async function replyRobloxStorageError(interaction, err) {
+    console.error('Erreur de stockage des liens Roblox :', err);
+    const response = {
+        content: '❌ Le stockage des liens Roblox est temporairement indisponible. Réessaie plus tard ou contacte un administrateur.',
+        flags: [MessageFlags.Ephemeral]
+    };
+    if (interaction.deferred || interaction.replied) {
+        return await interaction.editReply({ content: response.content });
+    }
+    return await interaction.reply(response);
 }
 
 function findRobloxLinkedRole(guild) {
@@ -551,7 +734,7 @@ function loadQuestsData() {
 }
 
 function saveQuestsData(data) {
-    fs.writeFileSync(QUESTS_FILE, JSON.stringify(data, null, 2));
+    savePersistentJsonFile(QUESTS_FILE, data);
 }
 
 function loadSpecialQuestsData() {
@@ -567,7 +750,7 @@ function loadSpecialQuestsData() {
 }
 
 function saveSpecialQuestsData(data) {
-    fs.writeFileSync(SPECIAL_QUESTS_FILE, JSON.stringify(data, null, 2));
+    savePersistentJsonFile(SPECIAL_QUESTS_FILE, data);
 }
 
 function loadQuestProofRequests() {
@@ -583,7 +766,7 @@ function loadQuestProofRequests() {
 }
 
 function saveQuestProofRequests(data) {
-    fs.writeFileSync(QUEST_PROOF_REQUESTS_FILE, JSON.stringify(data, null, 2));
+    savePersistentJsonFile(QUEST_PROOF_REQUESTS_FILE, data);
 }
 
 function getSpecialGuildState(data, guildId) {
@@ -1308,7 +1491,7 @@ if (fs.existsSync(CONFIG_FILE)) {
 }
 
 function saveConfigsToFile() {
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(savedConfigs, null, 2));
+    savePersistentJsonFile(CONFIG_FILE, savedConfigs);
 }
 
 const QUEST_TYPES = new Set(['messages', 'voice', 'invite', 'manual', 'reaction', 'hybrid']);
@@ -1627,6 +1810,7 @@ function saveLevelsData(data) {
     try {
         fs.writeFileSync(tempFile, serializedData, { flag: 'wx' });
         fs.renameSync(tempFile, LEVELS_FILE);
+        queuePersistentStateWrite(LEVELS_FILE, data);
     } catch (err) {
         if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
         throw new Error(`Impossible de sauvegarder les données de niveaux dans ${LEVELS_FILE}; le fichier existant est conservé.`, { cause: err });
@@ -3773,15 +3957,19 @@ client.on('interactionCreate', async (interaction) => {
             });
         }
 
-        const existingLink = getLinkedRobloxAccount(interaction.guild.id, interaction.user.id);
+        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+
+        let existingLink;
+        try {
+            existingLink = await getLinkedRobloxAccount(interaction.guild.id, interaction.user.id);
+        } catch (err) {
+            return await replyRobloxStorageError(interaction, err);
+        }
         if (existingLink) {
-            return await interaction.reply({
+            return await interaction.editReply({
                 content: `✅ Ton compte Discord est déjà lié à Roblox : **${existingLink.robloxUsername}**\nRecherche Roblox : https://www.roblox.com/search/users?keyword=${encodeURIComponent(existingLink.robloxUsername)}`,
-                flags: [MessageFlags.Ephemeral]
             });
         }
-
-        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
         const resolvedUser = await resolveRobloxUser(robloxUsername);
         if (!resolvedUser) {
@@ -3798,7 +3986,11 @@ client.on('interactionCreate', async (interaction) => {
             linkedAt: new Date().toISOString()
         };
 
-        setLinkedRobloxAccount(interaction.guild.id, interaction.user.id, linkPayload);
+        try {
+            await setLinkedRobloxAccount(interaction.guild.id, interaction.user.id, linkPayload);
+        } catch (err) {
+            return await replyRobloxStorageError(interaction, err);
+        }
 
         const linkedRole = findRobloxLinkedRole(interaction.guild);
 
@@ -3827,14 +4019,19 @@ client.on('interactionCreate', async (interaction) => {
 
     if (commandName === 'roblox') {
         const targetMember = options.getUser('membre') || interaction.user;
-        const linked = getLinkedRobloxAccount(interaction.guild.id, targetMember.id);
+        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+        let linked;
+        try {
+            linked = await getLinkedRobloxAccount(interaction.guild.id, targetMember.id);
+        } catch (err) {
+            return await replyRobloxStorageError(interaction, err);
+        }
 
         if (!linked) {
-            return await interaction.reply({
+            return await interaction.editReply({
                 content: targetMember.id === interaction.user.id
                     ? '⚠️ Tu n’as pas encore lié ton pseudo Roblox. Fais `/linkroblox pseudo:MonPseudo`.'
-                    : '⚠️ Ce membre n’a pas encore lié son pseudo Roblox.',
-                flags: [MessageFlags.Ephemeral]
+                    : '⚠️ Ce membre n’a pas encore lié son pseudo Roblox.'
             });
         }
 
@@ -3855,7 +4052,7 @@ client.on('interactionCreate', async (interaction) => {
             )
             .setTimestamp();
 
-        return await interaction.reply({ embeds: [profileEmbed], flags: [MessageFlags.Ephemeral] });
+        return await interaction.editReply({ embeds: [profileEmbed] });
     }
 
     if (commandName === 'robloxliens') {
@@ -3863,7 +4060,13 @@ client.on('interactionCreate', async (interaction) => {
             return await interaction.reply({ content: '❌ Cette commande est réservée aux administrateurs.', flags: [MessageFlags.Ephemeral] });
         }
 
-        const linkedAccounts = loadRobloxLinksData().linked || {};
+        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+        let linkedAccounts;
+        try {
+            linkedAccounts = (await loadRobloxLinksData()).linked || {};
+        } catch (err) {
+            return await replyRobloxStorageError(interaction, err);
+        }
         const guildPrefix = `${interaction.guild.id}:`;
         const entries = Object.entries(linkedAccounts)
             .filter(([key, account]) =>
@@ -3886,46 +4089,58 @@ client.on('interactionCreate', async (interaction) => {
             .sort((a, b) => a.robloxUsername.localeCompare(b.robloxUsername, 'fr', { sensitivity: 'base' }));
 
         if (entries.length === 0) {
-            return await interaction.reply({
-                content: 'Aucun compte Roblox n’est lié pour ce serveur.',
-                flags: [MessageFlags.Ephemeral]
-            });
+            return await interaction.editReply({ content: 'Aucun compte Roblox n’est lié pour ce serveur.' });
         }
 
         const pageSize = 10;
         const totalPages = Math.ceil(entries.length / pageSize);
         const requestedPage = options.getInteger('page') || 1;
         if (requestedPage > totalPages) {
-            return await interaction.reply({
-                content: `❌ Cette page n’existe pas. Il y a ${totalPages} page${totalPages > 1 ? 's' : ''} de comptes liés.`,
-                flags: [MessageFlags.Ephemeral]
+            return await interaction.editReply({
+                content: `❌ Cette page n’existe pas. Il y a ${totalPages} page${totalPages > 1 ? 's' : ''} de comptes liés.`
             });
         }
 
         const pageEntries = entries.slice((requestedPage - 1) * pageSize, requestedPage * pageSize);
-        const description = pageEntries.map((account, index) => {
+        const fields = pageEntries.map((account, index) => {
             const linkedDate = account.linkedAt && !Number.isNaN(Date.parse(account.linkedAt))
                 ? new Date(account.linkedAt).toLocaleDateString('fr-FR')
                 : 'Date inconnue';
-            return `**${(requestedPage - 1) * pageSize + index + 1}. <@${account.discordId}>** — [${account.robloxUsername}](${account.profileUrl}) · lié le ${linkedDate}`;
-        }).join('\n');
+            return {
+                name: `#${(requestedPage - 1) * pageSize + index + 1} · <@${account.discordId}>`,
+                value: `🎮 [${account.robloxUsername}](${account.profileUrl})\n📅 Lié le ${linkedDate}`,
+                inline: false
+            };
+        });
 
         const embed = new EmbedBuilder()
-            .setTitle(`🔗 Comptes Roblox liés • ${interaction.guild.name}`)
-            .setDescription(description)
-            .setFooter({ text: `Page ${requestedPage}/${totalPages} • ${entries.length} compte${entries.length > 1 ? 's' : ''} lié${entries.length > 1 ? 's' : ''}` })
-            .setColor(0x00A2FF);
+            .setTitle(`🔗 Comptes Roblox liés`)
+            .setDescription(`**${interaction.guild.name}**\n${entries.length} compte${entries.length > 1 ? 's' : ''} lié${entries.length > 1 ? 's' : ''} au total · ${pageEntries.length} affiché${pageEntries.length > 1 ? 's' : ''} sur cette page.`)
+            .addFields(fields)
+            .setFooter({
+                text: totalPages > 1
+                    ? `Page ${requestedPage}/${totalPages} • Utilise /robloxliens page:${requestedPage < totalPages ? requestedPage + 1 : 1} pour continuer`
+                    : `Page 1/1 • ${entries.length} compte${entries.length > 1 ? 's' : ''} lié${entries.length > 1 ? 's' : ''}`
+            })
+            .setColor(0x00A2FF)
+            .setTimestamp();
 
-        return await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
+        const guildIcon = interaction.guild.iconURL({ size: 128 });
+        if (guildIcon) embed.setThumbnail(guildIcon);
+
+        return await interaction.editReply({ embeds: [embed] });
     }
 
     if (commandName === 'unlinkroblox') {
-        const linked = getLinkedRobloxAccount(interaction.guild.id, interaction.user.id);
+        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+        let linked;
+        try {
+            linked = await getLinkedRobloxAccount(interaction.guild.id, interaction.user.id);
+        } catch (err) {
+            return await replyRobloxStorageError(interaction, err);
+        }
         if (!linked) {
-            return await interaction.reply({
-                content: '⚠️ Tu n’as pas de compte Roblox lié à retirer.',
-                flags: [MessageFlags.Ephemeral]
-            });
+            return await interaction.editReply({ content: '⚠️ Tu n’as pas de compte Roblox lié à retirer.' });
         }
 
         const linkedRole = findRobloxLinkedRole(interaction.guild);
@@ -3938,12 +4153,13 @@ client.on('interactionCreate', async (interaction) => {
             }
         }
 
-        removeLinkedRobloxAccount(interaction.guild.id, interaction.user.id);
+        try {
+            await removeLinkedRobloxAccount(interaction.guild.id, interaction.user.id);
+        } catch (err) {
+            return await replyRobloxStorageError(interaction, err);
+        }
 
-        return await interaction.reply({
-            content: '✅ Le lien Roblox a bien été supprimé de ton compte Discord.',
-            flags: [MessageFlags.Ephemeral]
-        });
+        return await interaction.editReply({ content: '✅ Le lien Roblox a bien été supprimé de ton compte Discord.' });
     }
 
     // --- /SETLOGS ---
@@ -8497,4 +8713,28 @@ http.createServer((req, res) => {
     res.end('Le bot Discord est en ligne !');
 }).listen(process.env.PORT || 3000);
 
-client.login(DISCORD_TOKEN); // <-- Lancement final
+async function startBot() {
+    try {
+        await initializePersistentState();
+        await client.login(DISCORD_TOKEN);
+    } catch (err) {
+        console.error('Impossible de démarrer le bot avec le stockage persistant :', err);
+        process.exit(1);
+    }
+}
+
+async function shutdownBot(signal) {
+    console.info(`${signal} reçu, attente de la sauvegarde Supabase en cours.`);
+    client.destroy();
+    await persistentStateWriteQueue;
+    if (persistentStateWriteError) {
+        console.error('La dernière sauvegarde Supabase a échoué avant l’arrêt :', persistentStateWriteError);
+        process.exitCode = 1;
+    }
+    process.exit();
+}
+
+process.once('SIGTERM', () => { void shutdownBot('SIGTERM'); });
+process.once('SIGINT', () => { void shutdownBot('SIGINT'); });
+
+void startBot();
