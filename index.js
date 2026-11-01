@@ -8851,6 +8851,7 @@ setInterval(async () => {
     for (const guild of client.guilds.cache.values()) {
         const guildConfig = savedConfigs[guild.id] || {};
         if (!guildConfig.tokenDropChannelId) continue;
+        const channelId = guildConfig.tokenDropChannelId;
 
         const nextDropAt = Number(guildConfig.nextTokenDropAt);
         if (!Number.isFinite(nextDropAt) || nextDropAt <= 0) {
@@ -8872,7 +8873,8 @@ setInterval(async () => {
         saveConfigsToFile();
 
         try {
-            const channel = await guild.channels.fetch(guildConfig.tokenDropChannelId);
+            const channel = await guild.channels.fetch(channelId);
+            if (savedConfigs[guild.id]?.tokenDropChannelId !== channelId) continue;
             if (!channel?.isTextBased() || typeof channel.send !== 'function') {
                 throw new Error('Le salon configuré pour les cadeaux de jetons n’est pas textuel.');
             }
