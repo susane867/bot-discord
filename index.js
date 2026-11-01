@@ -138,13 +138,13 @@ const DAILY_TOKEN_MAX_REWARD = 100;
 const rouletteSpinsInProgress = new Set();
 
 const ROULETTE_REWARDS = [
-    { label: 'Rôle 777', type: 'role', value: '777', chance: 1 },
-    { label: '+1 tour bonus', type: 'bonus_spin', value: 1, chance: 4 },
-    { label: 'Rôle mystère exclusif', type: 'unique_role', value: 'Mystère de la Roulette', chance: 1 },
-    { label: '300 IG', type: 'ig', value: 300, chance: 8 },
-    { label: 'Rôle Lucky', type: 'role', value: 'Lucky', chance: 15 },
-    { label: '200 XP', type: 'xp', value: 200, chance: 25 },
-    { label: 'Rien', type: 'none', value: 0, chance: 46 }
+    { label: 'Rôle 777', type: 'role', value: '777', chance: 2 },
+    { label: '+1 tour bonus', type: 'bonus_spin', value: 1, chance: 5 },
+    { label: 'Rôle mystère exclusif', type: 'unique_role', value: 'Mystère de la Roulette', chance: 2 },
+    { label: '300 IG', type: 'ig', value: 300, chance: 10 },
+    { label: 'Rôle Lucky', type: 'role', value: 'Lucky', chance: 18 },
+    { label: '200 XP', type: 'xp', value: 200, chance: 28 },
+    { label: 'Rien', type: 'none', value: 0, chance: 35 }
 ];
 
 const UNIQUE_ROULETTE_ROLE_TITLES = ['Vainqueur', 'Champion', 'Élu', 'Maître', 'Légende', 'Prodige', 'As', 'Favori', 'Virtuose', 'Star'];
