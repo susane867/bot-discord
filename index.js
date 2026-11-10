@@ -8955,7 +8955,25 @@ async function startBot() {
     try {
         console.info('Initialisation du stockage persistant...');
         await initializePersistentState();
-        console.info('Stockage persistant initialisé. Connexion au Gateway Discord...');
+        console.info('Stockage persistant initialisé. Vérification de l’accès réseau à Discord...');
+        try {
+            const response = await fetch('https://discord.com/api/v10/gateway', {
+                signal: AbortSignal.timeout(10_000)
+            });
+            console.info(
+                `Vérification réseau Discord : HTTP ${response.status}` +
+                (response.headers.get('retry-after') ? `, réessayer après ${response.headers.get('retry-after')} s` : '') +
+                '.'
+            );
+            await response.body?.cancel();
+        } catch (err) {
+            console.error(
+                `Vérification réseau Discord échouée (${err.cause?.code || err.name || 'erreur inconnue'}) :`,
+                err.message
+            );
+        }
+
+        console.info('Connexion au Gateway Discord...');
         const loginWatchdog = setTimeout(() => {
             if (!client.isReady()) {
                 console.warn('La connexion Discord est toujours en cours après 30 secondes. Consulte les messages Discord.js debug ci-dessus.');
