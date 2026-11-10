@@ -1460,6 +1460,19 @@ const client = new Client({
     ] 
 });
 
+client.on('error', err => {
+    console.error('Erreur Discord.js du client :', err);
+});
+client.on('shardError', (err, shardId) => {
+    console.error(`Erreur de connexion Discord sur le shard ${shardId} :`, err);
+});
+client.on('shardDisconnect', (closeEvent, shardId) => {
+    console.error(`Déconnexion du shard Discord ${shardId} (code ${closeEvent.code}) : ${closeEvent.reason || 'aucune raison fournie'}`);
+});
+client.on('shardReconnecting', shardId => {
+    console.warn(`Reconnexion au Gateway Discord en cours pour le shard ${shardId}.`);
+});
+
 const warns = new Map();
 const embedBuilders = new Map();
 const activeTickets = new Map();
@@ -3933,8 +3946,32 @@ function hasQuestValidationPermission(member) {
     return member.roles.cache.some(role => allowedRoleIds.includes(role.id));
 }
 
+function registerInteractionHandler(handler, handlerName) {
+    client.on('interactionCreate', interaction => {
+        void Promise.resolve()
+            .then(() => handler(interaction))
+            .catch(async err => {
+                console.error(`Erreur dans le traitement ${handlerName} de l’interaction ${interaction.id} (${interaction.commandName || interaction.customId || interaction.type}) :`, err);
+                if (!interaction.isRepliable() || interaction.replied) return;
+
+                try {
+                    if (interaction.deferred) {
+                        await interaction.editReply('❌ Une erreur interne est survenue. Le staff peut consulter les logs Render.');
+                    } else {
+                        await interaction.reply({
+                            content: '❌ Une erreur interne est survenue. Le staff peut consulter les logs Render.',
+                            flags: [MessageFlags.Ephemeral]
+                        });
+                    }
+                } catch (replyError) {
+                    console.error(`Impossible de répondre à l’interaction ${interaction.id} après son erreur :`, replyError);
+                }
+            });
+    });
+}
+
 // --- ÉCOUTEUR DES SLASH COMMANDS ---
-client.on('interactionCreate', async (interaction) => {
+registerInteractionHandler(async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
     const { commandName, options } = interaction;
@@ -5568,10 +5605,10 @@ client.on('interactionCreate', async (interaction) => {
             });
         }
     }
-}); // <-- Fin du bloc client.on de tes commandes slash
+}, 'des commandes slash'); // <-- Fin du bloc des commandes slash
 
 // --- ÉCOUTEUR GLOBAL DES INTERACTIONS (Boutons, Modals, Select Menus) ---
-client.on('interactionCreate', async interaction => {
+registerInteractionHandler(async interaction => {
     const userId = interaction.user.id;
 
     // --- 1. COMMANDES SLASH ---
@@ -7978,7 +8015,7 @@ client.on('interactionCreate', async interaction => {
             content: `✅ Grade sélectionné : **${nomGrade}**\n\nVoici ta fiche de candidature. Copie-la, remplis-la et envoie-la ici :\n\n${texteFiche}`
         });
     }
-}); // <-- Ferme l'écouteur global interactionCreate
+}, 'des boutons, menus et formulaires'); // <-- Ferme l'écouteur global interactionCreate
 
 async function addNormalQuestVoiceTime(guild, member, secondsSpent) {
     const voiceKey = getVoiceQuestKey(member.id, guild.id);
@@ -8893,16 +8930,24 @@ setInterval(async () => {
 }, 5 * 60 * 1000);
 
 http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('Le bot Discord est en ligne !');
+    const discordReady = client.isReady();
+    const health = {
+        status: discordReady ? 'ready' : 'starting',
+        discord: discordReady ? 'connected' : 'not_connected'
+    };
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify(health));
 }).listen(process.env.PORT || 3000);
 
 async function startBot() {
     try {
+        console.info('Initialisation du stockage persistant...');
         await initializePersistentState();
+        console.info('Stockage persistant initialisé. Connexion au Gateway Discord...');
         await client.login(DISCORD_TOKEN);
+        console.info(`Connexion Discord initialisée (état prêt : ${client.isReady()}).`);
     } catch (err) {
-        console.error('Impossible de démarrer le bot avec le stockage persistant :', err);
+        console.error('Impossible de démarrer le bot :', err);
         process.exit(1);
     }
 }
