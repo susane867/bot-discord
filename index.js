@@ -1477,6 +1477,13 @@ client.on('debug', message => {
         console.info(`Discord.js debug : ${message}`);
     }
 });
+client.rest.on('rateLimited', rateLimitData => {
+    console.warn(
+        `Limite API Discord atteinte : ${rateLimitData.method} ${rateLimitData.route}, ` +
+        `attente ${Math.ceil(rateLimitData.retryAfter)} ms, ` +
+        `limite globale : ${rateLimitData.global ? 'oui' : 'non'}.`
+    );
+});
 
 const warns = new Map();
 const embedBuilders = new Map();
@@ -8948,22 +8955,7 @@ async function startBot() {
     try {
         console.info('Initialisation du stockage persistant...');
         await initializePersistentState();
-        console.info('Stockage persistant initialisé. Test de l’API Discord...');
-        try {
-            const response = await fetch('https://discord.com/api/v10/gateway/bot', {
-                headers: { Authorization: `Bot ${DISCORD_TOKEN.replace(/^(Bot|Bearer)\s*/i, '')}` },
-                signal: AbortSignal.timeout(10_000)
-            });
-            console.info(`Test API Discord : HTTP ${response.status} ${response.statusText}.`);
-            await response.body?.cancel();
-        } catch (err) {
-            console.error(
-                `Test API Discord échoué (${err.cause?.code || err.name || 'erreur inconnue'}) :`,
-                err.message
-            );
-        }
-
-        console.info('Connexion au Gateway Discord...');
+        console.info('Stockage persistant initialisé. Connexion au Gateway Discord...');
         const loginWatchdog = setTimeout(() => {
             if (!client.isReady()) {
                 console.warn('La connexion Discord est toujours en cours après 30 secondes. Consulte les messages Discord.js debug ci-dessus.');
