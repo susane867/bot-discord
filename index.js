@@ -1472,6 +1472,11 @@ client.on('shardDisconnect', (closeEvent, shardId) => {
 client.on('shardReconnecting', shardId => {
     console.warn(`Reconnexion au Gateway Discord en cours pour le shard ${shardId}.`);
 });
+client.on('debug', message => {
+    if (/gateway|websocket|shard|identify|heartbeat/i.test(message)) {
+        console.info(`Discord.js debug : ${message}`);
+    }
+});
 
 const warns = new Map();
 const embedBuilders = new Map();
@@ -8944,8 +8949,18 @@ async function startBot() {
         console.info('Initialisation du stockage persistant...');
         await initializePersistentState();
         console.info('Stockage persistant initialisé. Connexion au Gateway Discord...');
-        await client.login(DISCORD_TOKEN);
-        console.info(`Connexion Discord initialisée (état prêt : ${client.isReady()}).`);
+        const loginWatchdog = setTimeout(() => {
+            if (!client.isReady()) {
+                console.warn('La connexion Discord est toujours en cours après 30 secondes. Consulte les messages Discord.js debug ci-dessus.');
+            }
+        }, 30_000);
+        loginWatchdog.unref();
+        try {
+            await client.login(DISCORD_TOKEN);
+            console.info(`Connexion Discord initialisée (état prêt : ${client.isReady()}).`);
+        } finally {
+            clearTimeout(loginWatchdog);
+        }
     } catch (err) {
         console.error('Impossible de démarrer le bot :', err);
         process.exit(1);
